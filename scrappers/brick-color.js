@@ -1,4 +1,6 @@
 
+// scrapes brick 3004 sales data for every color
+
 const fs = require('fs-extra');
 const puppeteer = require('puppeteer');
 
