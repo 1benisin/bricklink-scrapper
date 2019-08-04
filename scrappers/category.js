@@ -8,7 +8,7 @@ const puppeteer = require('puppeteer');
 async function scrapeCategory() {
   try {
     // -- const browser = await puppeteer.launch({ headless: true, slowMo: 0 });
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
 
     // -- create csv file
@@ -25,8 +25,7 @@ async function scrapeCategory() {
       return as.map(a => {
         // get the href and append it to base url
         return 'https://www.bricklink.com' + a.getAttribute('href')
-        // of everything after the first entry (it's the header row)
-      }).slice(0);
+      });
     })
 
     // -- go to page for each part
