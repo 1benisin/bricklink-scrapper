@@ -57,9 +57,9 @@ async function scrapePart(page, link) {
     // go to page and wait for selector
     await page.goto('about:blank');
     await page.goto(link, { waitUntil: 'networkidle0' });
-    const selector = '#id_divBlock_Main > table:nth-child(1) > tbody > tr:nth-child(1) > td > span > span:nth-child(1)'
 
     // get the part number
+    const selector = '#id_divBlock_Main > table:nth-child(1) > tbody > tr:nth-child(1) > td > span > span:nth-child(1)'
     const partNum = await page.$eval(selector, span => span.textContent);
 
     // get all the color codes

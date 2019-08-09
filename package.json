@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/1benisin/bricklink-scrapper#readme",
   "dependencies": {
+    "dotenv": "^8.0.0",
     "fs-extra": "^8.1.0",
+    "pg": "^7.12.0",
     "puppeteer": "^1.19.0"
   }
 }
