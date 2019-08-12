@@ -18,94 +18,12 @@ if (process.env.DATABASE_URL) {
 // global variables
 const DB_HEADERS = 'category_name,part_code,part_name,color_code,color_name,bricklink_url,sales_country,sold_new_times_sold,sold_new_total_qty,sold_new_min_price,sold_new_avg_price,sold_new_qty_avg_price,sold_new_max_price,sold_used_times_sold,sold_used_total_qty,sold_used_min_price,sold_used_avg_price,sold_used_qty_avg_price,sold_used_max_price,listed_new_total_lots,listed_new_total_qty,listed_new_min_price,listed_new_avg_price,listed_new_qty_avg_price,listed_new_max_price,listed_used_total_lots,listed_used_total_qty,listed_used_min_price,listed_used_avg_price,listed_used_qty_avg_price,listed_used_max_price,date_created';
 
-(async () => {
-  try {
 
+// __________________
+async function init() {
+  try {
     const browser = await puppeteer.launch({ headless: true });
 
-    const categoryCode = '46'
-    await scrapeFromCategoryForward(browser, categoryCode)
-
-    process.exit(0)
-  } catch (e) { console.log("MY 39bj ERROR: ", e); }
-  finally { await browser.close(); }
-
-})()
-
-// __________________
-async function scrapeFromCategoryForward(browser, categoryCode) {
-  try {
-    // -- go to Catgory Tree and get Category Codes
-    let categoryCodes = await getCategoryCodes(browser);
-    categoryCodes = categoryCodes.slice(categoryCodes.indexOf(categoryCode))
-
-    // -- go to each Category and get Part Codes
-    for (const categoryCode of categoryCodes) {
-      let partCodes = await getPartCodes(browser, categoryCode);
-
-      // go to each Part and get Color Codes
-      for (const partCode of partCodes) {
-        let colorCodes = await getColorCodes(browser, partCode);
-
-        console.log('#ofColors for part', partCode, '->', colorCodes.length)
-        // scrape part price guide page
-        for (const colorCode of colorCodes) {
-          const countries = await scrapePart(browser, partCode, colorCode);
-
-          for (const country of countries) {
-
-            //create a Part object
-            const part = Part.newPartfromArray(country);
-            // save Part object to DB
-            await part.saveToDB();
-            // console.log(part);
-
-          }
-        }
-      }
-
-    }
-
-  }
-  catch (e) { console.log("MY ded6 ERROR: ", e); }
-
-  return 'done';
-}
-
-// __________________
-async function scrapeFromCategories(browser, categoryCodes) {
-  try {
-    for (const categoryCode of categoryCodes) {
-      let partCodes = await getPartCodes(browser, categoryCode);
-
-      // go to each Part and get Color Codes
-      for (const partCode of partCodes) {
-        let colorCodes = await getColorCodes(browser, partCode);
-
-        console.log('#ofColors for part', partCode, '->', colorCodes.length)
-        // scrape part price guide page
-        for (const colorCode of colorCodes) {
-          const countries = await scrapePart(browser, partCode, colorCode);
-
-          for (const country of countries) {
-
-            //create a Part object
-            const part = Part.newPartfromArray(country);
-            // save Part object to DB
-            await part.saveToDB();
-            // console.log(part);
-
-          }
-        }
-      }
-    }
-
-  } catch (e) { console.log("MY ded6 ERROR: ", e); }
-}
-
-// __________________
-async function scrapeFullCatalog(browser) {
-  try {
     // -- go to Catgory Tree and get Category Codes
     const categoryCodes = await getCategoryCodes(browser);
 
@@ -138,10 +56,12 @@ async function scrapeFullCatalog(browser) {
 
   }
   catch (e) { console.log("MY ded6 ERROR: ", e); }
+  finally { await browser.close(); }
+
 
   return 'done';
 }
-
+init();
 
 // _____________________________________________________________________________
 function Part(components) {
@@ -181,7 +101,7 @@ function Part(components) {
 Part.prototype.saveToDB = async function () {
   try {
     // TODO: conslole log out first 7 values and check for dubs
-    console.log('DB SAVE:', this.category_name, '-', this.part_code, '-', this.color_code, '-', this.sales_country, '-', this.sold_new_total_qty, this.sold_used_total_qty, this.listed_new_total_qty, this.listed_used_total_qty);
+    console.log('DB SAVE: ', this.category_name, this.part_code, this.color_code, this.sales_country, this.sold_new_total_qty, this.sold_used_total_qty, this.listed_new_total_qty, this.listed_used_total_qty);
 
     const SQL = `INSERT INTO part (${DB_HEADERS}) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32);`;
     const values = [this.category_name, this.part_code, this.part_name, this.color_code, this.color_name, this.bricklink_url, this.sales_country, this.sold_new_times_sold, this.sold_new_total_qty, this.sold_new_min_price, this.sold_new_avg_price, this.sold_new_qty_avg_price, this.sold_new_max_price, this.sold_used_times_sold, this.sold_used_total_qty, this.sold_used_min_price, this.sold_used_avg_price, this.sold_used_qty_avg_price, this.sold_used_max_price, this.listed_new_total_lots, this.listed_new_total_qty, this.listed_new_min_price, this.listed_new_avg_price, this.listed_new_qty_avg_price, this.listed_new_max_price, this.listed_used_total_lots, this.listed_used_total_qty, this.listed_used_min_price, this.listed_used_avg_price, this.listed_used_qty_avg_price, this.listed_used_max_price, this.date_created];
