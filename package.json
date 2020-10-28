@@ -18,6 +18,10 @@
   },
   "homepage": "https://github.com/1benisin/bricklink-scrapper#readme",
   "dependencies": {
-    "dotenv": "^8.2.0"
-  }
+    "csv-writer": "^1.6.0",
+    "dotenv": "^8.2.0",
+    "node-fetch": "^2.6.1",
+    "puppeteer": "^5.3.1"
+  },
+  "devDependencies": {}
 }
