@@ -1,13 +1,22 @@
 {
-    "env": {
-        "browser": true,
-        "commonjs": true,
-        "es2021": true
-    },
-    "extends": "eslint:recommended",
-    "parserOptions": {
-        "ecmaVersion": 12
-    },
+    "extends": [
+      "wesbos"
+    ],
     "rules": {
+      "no-unused-vars": "off",
+      "jsx-a11y/no-noninteractive-element-interactions": "off",
+      "jsx-a11y/no-static-element-interactions": "off",
+      "jsx-a11y/click-events-have-key-events": "off",
+      "no-console": "off",
+      "react-hooks/exhaustive-deps": "warn",
+      "prettier/prettier": [
+        "warn",
+        {
+          "trailingComma": "es5",
+          "singleQuote": true,
+          "printWidth": 120,
+          "tabWidth": 2
+        }
+      ] 
     }
-}
+  }  

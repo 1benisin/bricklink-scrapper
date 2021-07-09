@@ -1,3 +1,7 @@
+
+# environment variables I created
+env.js
+
 # Logs
 logs
 *.log
@@ -56,6 +60,7 @@ typings/
 
 # dotenv environment variables file
 .env
+
 
 # next.js build output
 .next
